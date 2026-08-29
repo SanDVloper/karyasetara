@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'capability_bitmask',
+        'latitude',
+        'longitude',
+        'address',
     ];
 
     /**
@@ -41,5 +46,32 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'capability_bitmask' => 'integer',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
+
+    /**
+     * Check if user is worker.
+     */
+    public function isWorker(): bool
+    {
+        return $this->role === 'worker';
+    }
+
+    /**
+     * Check if user is employer.
+     */
+    public function isEmployer(): bool
+    {
+        return $this->role === 'employer';
+    }
+
+    /**
+     * Check if user is admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }
