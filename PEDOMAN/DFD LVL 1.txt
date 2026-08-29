@@ -1,0 +1,539 @@
+# USE CASE DESCRIPTION — KARYASETARA MVP
+
+## UC-01 — Register
+
+**Aktor:** Worker, Employer
+
+**Tujuan:**
+Membuat akun agar pengguna dapat menggunakan platform KaryaSetara.
+
+**Precondition:**
+
+* Pengguna belum memiliki akun.
+
+**Main Flow:**
+
+1. Pengguna membuka halaman Register.
+2. Pengguna memilih role Worker atau Employer.
+3. Pengguna mengisi nama, email, dan password.
+4. Sistem melakukan validasi data.
+5. Sistem menyimpan akun.
+6. Sistem mengarahkan pengguna ke halaman Login.
+
+**Alternative Flow:**
+
+* Email sudah terdaftar → sistem menampilkan pesan bahwa email sudah digunakan.
+* Data tidak valid → sistem meminta pengguna memperbaiki data.
+
+**Postcondition:**
+
+* Akun berhasil dibuat.
+
+---
+
+# UC-02 — Login
+
+**Aktor:** Worker, Employer, Admin
+
+**Tujuan:**
+Memberikan akses kepada pengguna sesuai dengan role-nya.
+
+**Precondition:**
+
+* Pengguna sudah memiliki akun.
+
+**Main Flow:**
+
+1. Pengguna memasukkan email dan password.
+2. Sistem memvalidasi kredensial.
+3. Sistem memeriksa role pengguna.
+4. Sistem membuat session/token.
+5. Sistem mengarahkan pengguna ke dashboard sesuai role.
+
+**Alternative Flow:**
+
+* Email/password salah → sistem menampilkan pesan login gagal.
+* Akun dinonaktifkan → sistem menolak akses.
+
+**Postcondition:**
+
+* Pengguna berhasil masuk ke sistem.
+
+---
+
+# UC-03 — Mengelola Profil Worker
+
+**Aktor:** Worker
+
+**Tujuan:**
+Menyediakan informasi kemampuan Worker yang digunakan oleh sistem dalam proses matching.
+
+**Precondition:**
+
+* Worker sudah login.
+
+**Main Flow:**
+
+1. Worker membuka halaman profil.
+2. Worker mengisi informasi profil.
+3. Worker memilih kemampuan yang dimiliki.
+4. Worker menentukan lokasi.
+5. Worker menentukan accessibility preference.
+6. Worker menyimpan profil.
+7. Sistem menyimpan perubahan.
+
+**Alternative Flow:**
+
+* Data wajib belum lengkap → sistem meminta Worker melengkapinya.
+
+**Postcondition:**
+
+* Profil Worker tersimpan dan dapat digunakan dalam proses matching.
+
+---
+
+# UC-04 — Membuat Pekerjaan
+
+**Aktor:** Employer
+
+**Tujuan:**
+Membuat pekerjaan yang dapat dicocokkan dengan Worker yang sesuai.
+
+**Precondition:**
+
+* Employer sudah login.
+
+**Main Flow:**
+
+1. Employer membuka halaman "Buat Pekerjaan".
+2. Employer mengisi judul pekerjaan.
+3. Employer mengisi deskripsi.
+4. Employer menentukan kemampuan yang dibutuhkan.
+5. Employer menentukan lokasi pekerjaan.
+6. Employer menentukan nominal upah.
+7. Employer mengirim pekerjaan.
+8. Sistem melakukan validasi.
+9. Sistem menyimpan pekerjaan.
+10. Sistem membuat pekerjaan menjadi aktif.
+11. Sistem memulai proses matching.
+
+**Alternative Flow:**
+
+* Data tidak lengkap → pekerjaan tidak dapat dipublikasikan.
+* Upah tidak valid → sistem meminta Employer memperbaiki nominal.
+* Lokasi tidak tersedia → sistem meminta Employer menentukan lokasi.
+
+**Postcondition:**
+
+* Pekerjaan tersimpan dan siap dicocokkan dengan Worker.
+
+---
+
+# UC-05 — Melakukan Matching
+
+**Aktor:** Sistem
+
+**Tujuan:**
+Menentukan Worker yang paling sesuai dengan kebutuhan pekerjaan.
+
+**Trigger:**
+
+* Employer berhasil membuat pekerjaan.
+
+**Precondition:**
+
+* Pekerjaan aktif.
+* Terdapat data kemampuan dan lokasi Worker.
+
+**Main Flow:**
+
+1. Sistem mengambil kebutuhan kemampuan pekerjaan.
+2. Sistem mengambil data kemampuan Worker.
+3. Sistem melakukan Skill Matching.
+4. Sistem menghitung kecocokan kemampuan.
+5. Sistem menghitung jarak antara Worker dan lokasi pekerjaan.
+6. Sistem menghitung priority score.
+7. Sistem menghitung total Match Score.
+8. Sistem melakukan ranking kandidat.
+9. Sistem menyimpan hasil matching.
+10. Sistem menampilkan kandidat berdasarkan ranking.
+
+**Postcondition:**
+
+* Sistem menghasilkan daftar kandidat yang telah diurutkan berdasarkan kecocokan.
+
+---
+
+# UC-06 — Melihat Kandidat
+
+**Aktor:** Employer
+
+**Tujuan:**
+Melihat Worker yang direkomendasikan oleh sistem.
+
+**Precondition:**
+
+* Employer sudah membuat pekerjaan.
+* Sistem telah menghasilkan hasil matching.
+
+**Main Flow:**
+
+1. Employer membuka pekerjaan.
+2. Sistem menampilkan daftar kandidat.
+3. Sistem menampilkan Match Score.
+4. Sistem menampilkan jarak kandidat.
+5. Sistem menampilkan kemampuan yang cocok.
+6. Sistem menampilkan alasan kandidat direkomendasikan.
+7. Employer membandingkan kandidat.
+
+**Postcondition:**
+
+* Employer mengetahui kandidat yang paling sesuai untuk pekerjaannya.
+
+---
+
+# UC-07 — Memilih Worker
+
+**Aktor:** Employer
+
+**Tujuan:**
+Menentukan Worker yang akan mengerjakan pekerjaan.
+
+**Precondition:**
+
+* Employer telah melihat kandidat.
+* Pekerjaan masih tersedia.
+
+**Main Flow:**
+
+1. Employer memilih salah satu kandidat.
+2. Sistem menampilkan konfirmasi.
+3. Employer mengonfirmasi pilihan.
+4. Sistem menetapkan Worker pada pekerjaan.
+5. Status pekerjaan berubah menjadi "Menunggu Penerimaan".
+
+**Alternative Flow:**
+
+* Employer membatalkan pilihan → sistem kembali ke daftar kandidat.
+
+**Postcondition:**
+
+* Worker terpilih untuk pekerjaan tersebut.
+
+---
+
+# UC-08 — Menerima Pekerjaan
+
+**Aktor:** Worker
+
+**Tujuan:**
+Menerima pekerjaan yang ditawarkan oleh Employer.
+
+**Precondition:**
+
+* Worker mendapatkan tawaran pekerjaan.
+* Pekerjaan masih tersedia.
+
+**Main Flow:**
+
+1. Worker membuka detail pekerjaan.
+2. Worker melihat informasi pekerjaan.
+3. Worker melihat nominal upah.
+4. Worker memilih "Terima".
+5. Sistem meminta konfirmasi.
+6. Worker mengonfirmasi.
+7. Sistem mengubah status pekerjaan menjadi "Aktif".
+8. Sistem mengunci status upah.
+
+**Alternative Flow:**
+
+* Worker menolak → status tawaran menjadi ditolak dan pekerjaan dapat diberikan kepada kandidat lain.
+
+**Postcondition:**
+
+* Pekerjaan aktif dan Worker ditetapkan sebagai pelaksana.
+
+---
+
+# UC-09 — Melihat Status Pekerjaan
+
+**Aktor:** Worker, Employer
+
+**Tujuan:**
+Mengetahui perkembangan pekerjaan.
+
+**Status utama:**
+
+Pending
+→ Matched
+→ Waiting Acceptance
+→ Active
+→ Waiting Confirmation
+→ Completed
+
+**Main Flow:**
+
+1. Pengguna membuka pekerjaan.
+2. Sistem mengambil status terbaru.
+3. Sistem menampilkan status pekerjaan.
+4. Sistem menampilkan informasi pembayaran sesuai status.
+
+**Postcondition:**
+
+* Pengguna mengetahui kondisi terbaru pekerjaan.
+
+---
+
+# UC-10 — Menandai Pekerjaan Selesai
+
+**Aktor:** Worker
+
+**Tujuan:**
+Memberitahukan Employer bahwa pekerjaan telah selesai.
+
+**Precondition:**
+
+* Pekerjaan berstatus Active.
+* Worker merupakan pelaksana pekerjaan.
+
+**Main Flow:**
+
+1. Worker membuka pekerjaan aktif.
+2. Worker memilih "Pekerjaan Selesai".
+3. Sistem meminta konfirmasi.
+4. Worker mengonfirmasi.
+5. Sistem mengubah status menjadi "Menunggu Konfirmasi".
+6. Sistem memberi tahu Employer.
+
+**Postcondition:**
+
+* Pekerjaan menunggu konfirmasi Employer.
+
+---
+
+# UC-11 — Mengonfirmasi Pekerjaan Selesai
+
+**Aktor:** Employer
+
+**Tujuan:**
+Mengonfirmasi bahwa pekerjaan telah diselesaikan oleh Worker.
+
+**Precondition:**
+
+* Pekerjaan berstatus Waiting Confirmation.
+
+**Main Flow:**
+
+1. Employer membuka pekerjaan.
+2. Employer memeriksa status pekerjaan.
+3. Employer memilih "Konfirmasi Selesai".
+4. Sistem meminta konfirmasi.
+5. Employer mengonfirmasi.
+6. Sistem mengubah status pekerjaan menjadi Completed.
+7. Sistem mengubah payment status menjadi Processing.
+
+**Alternative Flow:**
+
+* Employer belum menyetujui → pekerjaan tetap dalam status Waiting Confirmation.
+
+**Postcondition:**
+
+* Pekerjaan selesai.
+* Status pembayaran berubah menjadi Processing.
+
+---
+
+# UC-12 — Mengelola Status Pembayaran
+
+**Aktor:** Sistem
+
+**Tujuan:**
+Menjaga agar status upah mengikuti status pekerjaan.
+
+**Precondition:**
+
+* Employer telah menentukan nominal upah.
+
+**Main Flow:**
+
+Saat pekerjaan dibuat:
+→ Payment Status = Locked
+
+Saat Worker menerima:
+→ Payment Status = Locked
+
+Saat Worker menyelesaikan:
+→ Payment Status = Waiting Confirmation
+
+Saat Employer mengonfirmasi:
+→ Payment Status = Processing
+
+**Catatan:**
+KaryaSetara tidak menggunakan payment gateway pada MVP. Sistem hanya mengelola status pembayaran sebagai bagian dari alur keamanan transaksi.
+
+**Postcondition:**
+
+* Status pembayaran selalu mengikuti kondisi pekerjaan.
+
+---
+
+# UC-13 — Melaporkan Pekerjaan atau Employer
+
+**Aktor:** Worker
+
+**Tujuan:**
+Melaporkan pekerjaan atau perilaku Employer yang dianggap bermasalah.
+
+**Precondition:**
+
+* Worker sudah login.
+
+**Main Flow:**
+
+1. Worker membuka pekerjaan atau profil Employer.
+2. Worker memilih "Laporkan".
+3. Sistem menampilkan form laporan.
+4. Worker memilih alasan laporan.
+5. Worker menuliskan deskripsi laporan.
+6. Worker dapat mengunggah bukti.
+7. Worker mengirim laporan.
+8. Sistem menyimpan laporan.
+9. Sistem memberikan status "Menunggu Review".
+
+**Alternative Flow:**
+
+* Worker tidak memiliki bukti → laporan tetap dapat dikirim.
+* Data laporan belum lengkap → sistem meminta data dilengkapi.
+
+**Postcondition:**
+
+* Laporan tersimpan dan dapat ditinjau Admin.
+
+---
+
+# UC-14 — Meninjau Laporan
+
+**Aktor:** Admin
+
+**Tujuan:**
+Memeriksa laporan dan menentukan apakah terdapat pelanggaran.
+
+**Precondition:**
+
+* Admin sudah login.
+* Terdapat laporan yang masuk.
+
+**Main Flow:**
+
+1. Admin membuka daftar laporan.
+2. Admin memilih laporan.
+3. Sistem menampilkan detail laporan.
+4. Admin melihat informasi pekerjaan.
+5. Admin melihat informasi Employer.
+6. Admin melihat alasan laporan.
+7. Admin melihat deskripsi laporan.
+8. Admin melihat bukti jika tersedia.
+9. Admin melakukan peninjauan.
+10. Admin menentukan tindakan.
+
+**Postcondition:**
+
+* Laporan memiliki status hasil review.
+
+---
+
+# UC-15 — Melakukan Moderasi
+
+**Aktor:** Admin
+
+**Tujuan:**
+Mengambil tindakan terhadap pekerjaan atau Employer yang terbukti bermasalah.
+
+**Precondition:**
+
+* Admin telah meninjau laporan.
+
+**Main Flow:**
+Admin dapat memilih:
+
+1. Tetap Aktif
+   → Tidak ditemukan pelanggaran.
+
+2. Memberikan Peringatan
+   → Pelanggaran ringan.
+
+3. Menonaktifkan Pekerjaan
+   → Pekerjaan terbukti bermasalah.
+
+4. Menonaktifkan Akun Employer
+   → Pelanggaran berat atau berulang.
+
+**Postcondition:**
+
+* Status pekerjaan atau akun diperbarui sesuai keputusan Admin.
+
+---
+
+# PRIORITAS USE CASE UNTUK DEVELOPMENT
+
+Tidak semua Use Case memiliki tingkat kepentingan yang sama.
+
+## PRIORITAS P0 — WAJIB BERFUNGSI
+
+1. Register
+2. Login
+3. Mengelola Profil Worker
+4. Membuat Pekerjaan
+5. Matching
+6. Melihat Kandidat
+7. Memilih Worker
+8. Menerima Pekerjaan
+9. Menandai Pekerjaan Selesai
+10. Mengonfirmasi Pekerjaan Selesai
+11. Payment Status
+
+Ini adalah GOLDEN FLOW utama.
+
+## PRIORITAS P1 — PENTING
+
+12. Melaporkan Pekerjaan/Employer
+13. Mengunggah Bukti
+14. Meninjau Laporan
+15. Moderasi Admin
+
+Ini adalah TRUST & SAFETY FLOW.
+
+## PRIORITAS P2 — PENDUKUNG
+
+16. Accessibility Preference
+17. Detail tambahan dashboard
+18. Fitur pendukung lainnya
+
+Fitur P2 boleh disederhanakan apabila waktu development terbatas.
+
+---
+
+# GOLDEN FLOW YANG AKAN MENJADI DASAR DIAGRAM BERIKUTNYA
+
+Employer Login
+→ Membuat Pekerjaan
+→ Sistem Matching
+→ Employer Melihat Kandidat
+→ Employer Memilih Worker
+→ Worker Menerima Pekerjaan
+→ Pekerjaan Aktif
+→ Worker Menyelesaikan Pekerjaan
+→ Employer Mengonfirmasi
+→ Payment Status berubah
+
+# TRUST & SAFETY FLOW
+
+Worker
+→ Melaporkan Employer/Pekerjaan
+→ Mengisi Alasan
+→ Upload Bukti (opsional)
+→ Admin menerima laporan
+→ Admin meninjau
+→ Admin mengambil tindakan
+
+Dua alur inilah yang nantinya menjadi dasar utama untuk Activity Diagram dan Sequence Diagram.

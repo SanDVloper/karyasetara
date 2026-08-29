@@ -1,0 +1,113 @@
+D4 JOBS
+                    │
+                    │ Job Requirements
+                    ▼
+             ┌───────────────┐
+             │ 3.1 Ambil     │
+             │ Kebutuhan Job │
+             └───────┬───────┘
+                     │
+                     ▼
+              Skill Requirements
+                     │
+                     │
+                     ▼
+              ┌───────────────┐
+              │ 3.2 Skill     │
+              │ Matching      │
+              └───────┬───────┘
+                      │
+              Skill Score
+                      │
+                      ▼
+             ┌────────────────┐
+             │ 3.3 Distance   │
+             │ Calculation    │
+             └───────┬────────┘
+                     │
+               Distance Score
+                     │
+                     ▼
+             ┌────────────────┐
+             │ 3.4 Priority   │
+             │ Calculation    │
+             └───────┬────────┘
+                     │
+               Priority Score
+                     │
+                     ▼
+             ┌────────────────┐
+             │ 3.5 Generate   │
+             │ Match Score    │
+             └───────┬────────┘
+                     │
+                     ▼
+             ┌────────────────┐
+             │ 3.6 Ranking     │
+             │ Candidate       │
+             └───────┬────────┘
+                     │
+                     ▼
+                 D5 MATCHES
+                     │
+             ┌───────┴────────┐
+             ▼                ▼
+         EMPLOYER          WORKER
+
+
+WORKER
+                       │
+                       │ Report
+                       ▼
+              ┌─────────────────┐
+              │ 5.1 Membuat     │
+              │ Laporan         │
+              └────────┬────────┘
+                       │
+                       ▼
+                 ┌───────────┐
+                 │ 5.2       │
+                 │ Validasi  │
+                 │ Laporan   │
+                 └─────┬─────┘
+                       │
+                       ▼
+                  D7 REPORTS
+                       │
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ 5.3 Simpan     │
+              │ Bukti          │
+              └────────┬────────┘
+                       │
+                       ▼
+                 D8 EVIDENCES
+                       │
+                       │
+                       ▼
+                    ADMIN
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ 5.4 Review      │
+              │ Laporan         │
+              └────────┬────────┘
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ 5.5 Tentukan   │
+              │ Tindakan        │
+              └────────┬────────┘
+                       │
+              ┌────────┼─────────┐
+              ▼        ▼         ▼
+           Warning   Suspend   Resolve
+              │        │         │
+              └────────┼─────────┘
+                       ▼
+                    D1 USERS
+                    D4 JOBS
+                       │
+                       ▼
+                    WORKER

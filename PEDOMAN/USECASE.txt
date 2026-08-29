@@ -1,0 +1,53 @@
+EMPLOYER
+Login
+↓
+Buat pekerjaan
+↓
+"Transkripsi Audio"
+↓
+Butuh: mengetik + membaca + komunikasi teks
+↓
+Upah Rp50.000
+↓
+Publish
+
+        ↓
+
+KARYASETARA
+Mencari kandidat
+↓
+Match Score
+↓
+Made — 92%
+↓
+1,2 km
+↓
+5/5 kemampuan terpenuhi
+
+        ↓
+
+EMPLOYER
+Pilih Made
+
+        ↓
+
+WORKER
+Login
+↓
+Menerima pekerjaan
+↓
+Pekerjaan aktif
+↓
+Selesai
+
+        ↓
+
+EMPLOYER
+Konfirmasi
+
+        ↓
+
+PAYMENT
+🔒 Upah Terkunci
+↓
+✓ Pembayaran diproses

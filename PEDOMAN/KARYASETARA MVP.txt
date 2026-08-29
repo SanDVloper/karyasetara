@@ -1,0 +1,54 @@
+KARYASETARA MVP
+
+1. Authentication
+   - Register
+   - Login
+   - Role Worker / Employer
+
+2. Worker Profile
+   - Profil
+   - Kemampuan
+   - Lokasi
+   - Accessibility preference
+
+3. Job Management
+   - Employer membuat pekerjaan
+   - Detail pekerjaan
+   - Kemampuan yang dibutuhkan
+   - Lokasi
+   - Upah
+
+4. Smart Matching
+   - Skill matching
+   - Radius/location matching
+   - Priority ranking
+   - Match score
+
+5. Worker Recommendation
+   - Worker melihat pekerjaan yang cocok
+   - Employer melihat kandidat terbaik
+   - Alasan rekomendasi
+
+6. Job Flow
+   - Apply/Accept
+   - Active
+   - Complete
+   - Employer confirmation
+
+7. Secure Payment Status
+   - Nominal upah
+   - Upah terkunci
+   - Menunggu konfirmasi
+   - Pembayaran diproses
+
+8. Accessibility
+   - Font besar
+   - High contrast
+   - Large interaction target
+   - Screen-reader friendly
+   - Voice/TTS untuk showcase
+
+9. Dashboard
+   - Worker dashboard
+   - Employer dashboard
+   - Matching dashboard

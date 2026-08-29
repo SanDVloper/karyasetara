@@ -1,0 +1,31 @@
+KARYASETARA
+│
+├── Public
+│   ├── Landing Page
+│   ├── Tentang KaryaSetara
+│   ├── Cara Kerja
+│   └── Login / Register
+│
+├── Worker
+│   ├── Dashboard
+│   ├── Rekomendasi Pekerjaan
+│   ├── Pekerjaan Saya
+│   ├── Detail Pekerjaan
+│   ├── Profil Saya
+│   ├── Accessibility
+│   └── Laporan Saya
+│
+├── Employer
+│   ├── Dashboard
+│   ├── Buat Pekerjaan
+│   ├── Pekerjaan Saya
+│   ├── Detail Pekerjaan
+│   ├── Kandidat
+│   └── Profil
+│
+└── Admin
+    ├── Dashboard
+    ├── Laporan
+    ├── Detail Laporan
+    ├── Employer
+    └── Pekerjaan
