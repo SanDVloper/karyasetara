@@ -40,22 +40,20 @@ class MatchingService
                 continue; 
             }
             
-            // Calculate Priority Score
-            // The lower the distance, the higher the priority.
-            // SplPriorityQueue is a max-heap in PHP (highest value extracted first)
-            // So we use negative distance or an inverse score.
-            // Example score: 1000 - (distance * 10). 
-            $priorityScore = 1000 - ($distance * 10);
-            
-            // If we want to add waiting time to priority (Fairness distribution), 
-            // we could add points for days since last job.
-            // $daysSinceLastJob = now()->diffInDays($worker->last_job_completed_at ?? $worker->created_at);
-            // $priorityScore += ($daysSinceLastJob * 2);
+            // Calculate Priority Score: skill base 60 + distance up to 40 + fairness
+            $skillCoverage = $job->required_capability_bitmask === 0 ? 1 : (1); // strict pass already, give full
+            $skillScore = 60;
+            $distanceScore = max(0, 40 - ($distance * 8)); // 5km => 0, 0km =>40
+            $daysSince = now()->diffInDays($worker->updated_at ?? $worker->created_at);
+            $fairness = min(10, $daysSince * 0.5);
+            $matchScorePercent = min(100, $skillScore + $distanceScore + $fairness); // 0-100
+            $priorityScore = $matchScorePercent * 10 + (5 - $distance); // for heap ordering
             
             $priorityQueue->insert([
                 'worker' => $worker,
                 'distance' => round($distance, 2),
-                'match_score' => $priorityScore
+                'match_score' => round($matchScorePercent,1),
+                'reason' => $distance <= 2 ? 'Sangat dekat & kemampuan lengkap' : ($distance <=5 ? 'Dalam radius aman & kemampuan sesuai' : 'Luar radius'),
             ], $priorityScore);
         }
         
