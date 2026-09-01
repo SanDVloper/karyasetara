@@ -26,6 +26,9 @@ class User extends Authenticatable
         'latitude',
         'longitude',
         'address',
+        'accessibility_preference',
+        'is_suspended',
+        'suspended_at',
     ];
 
     /**
@@ -49,6 +52,9 @@ class User extends Authenticatable
         'capability_bitmask' => 'integer',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
+        'accessibility_preference' => 'array',
+        'is_suspended' => 'boolean',
+        'suspended_at' => 'datetime',
     ];
 
     /**
@@ -73,5 +79,35 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function employerJobs()
+    {
+        return $this->hasMany(Job::class, 'employer_id');
+    }
+
+    public function workerJobs()
+    {
+        return $this->hasMany(Job::class, 'worker_id');
+    }
+
+    public function reports() { return $this->hasMany(Report::class, 'reporter_id'); }
+
+    public function scopeSelectDistanceTo($query, $latitude, $longitude)
+    {
+        $query->addSelect('users.*');
+        if (is_null($latitude) || is_null($longitude)) {
+            return $query->addSelect(\DB::raw('null as distance'));
+        }
+
+        $lat = floatval($latitude);
+        $lng = floatval($longitude);
+        $haversine = "(6371 * acos(cos(radians({$lat})) 
+                     * cos(radians(latitude)) 
+                     * cos(radians(longitude) - radians({$lng})) 
+                     + sin(radians({$lat})) 
+                     * sin(radians(latitude))))";
+
+        return $query->addSelect(\DB::raw("{$haversine} AS distance"));
     }
 }

@@ -62,7 +62,8 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/register", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const response = await fetch(`${apiUrl}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,6 +88,7 @@ export default function Register() {
       setSuccessMessage("Pendaftaran berhasil! Menyimpan sesi dan mengalihkan...");
       if (data.data?.token) {
         localStorage.setItem("auth_token", data.data.token);
+        localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
       }
 
@@ -94,7 +96,7 @@ export default function Register() {
         router.push("/login");
       }, 1500);
     } catch (err) {
-      setErrorMessage("Gagal terhubung ke server backend. Pastikan Laravel backend berjalan di http://localhost:8000");
+      setErrorMessage("Gagal terhubung ke server backend. Pastikan Laravel backend berjalan di http://localhost:8000 - " + (err instanceof Error ? err.message : ""));
     } finally {
       setLoading(false);
     }

@@ -26,7 +26,7 @@ export default function Home() {
               <Link href="/register" className="bg-primary text-white text-center px-8 py-3.5 rounded-xl font-semibold hover:bg-primary-hover transition-colors shadow-lg shadow-blue-500/25">
                 Mulai Sekarang &rarr;
               </Link>
-              <Link href="/employer/register" className="bg-white text-primary border border-slate-200 text-center px-8 py-3.5 rounded-xl font-semibold hover:bg-slate-50 transition-colors">
+              <Link href="/register" className="bg-white text-primary border border-slate-200 text-center px-8 py-3.5 rounded-xl font-semibold hover:bg-slate-50 transition-colors">
                 Untuk Perusahaan
               </Link>
             </div>
