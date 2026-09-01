@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Lock, Eye } from "lucide-react";
+import { Mail, Lock, Eye, ShieldCheck } from "lucide-react";
 
 export default function Login() {
   return (
