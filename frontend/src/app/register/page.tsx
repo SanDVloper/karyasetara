@@ -246,6 +246,23 @@ export default function Register() {
             )}
           </div>
 
+          {/* Pilih Role - INI YANG BIKIN AREA PERUSAHAAN GAGAL SEBELUMNYA (selalu worker) */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700 block">Daftar Sebagai</label>
+            <div className="grid grid-cols-2 gap-3">
+              <label className={`flex items-center gap-3 p-3 border rounded-xl cursor-pointer ${formData.role==='worker'?'border-primary bg-blue-50':'border-slate-300 hover:bg-slate-50'}`}>
+                <input type="radio" name="role" value="worker" checked={formData.role==='worker'} onChange={handleChange} className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-slate-700">Pekerja</span>
+              </label>
+              <label className={`flex items-center gap-3 p-3 border rounded-xl cursor-pointer ${formData.role==='employer'?'border-primary bg-blue-50':'border-slate-300 hover:bg-slate-50'}`}>
+                <input type="radio" name="role" value="employer" checked={formData.role==='employer'} onChange={handleChange} className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-slate-700">Perusahaan</span>
+              </label>
+            </div>
+            <p className="text-xs text-slate-500">Pilih <b>Perusahaan</b> agar bisa login ke Area Perusahaan (strict). Akun worker tidak bisa masuk area perusahaan.</p>
+            {fieldErrors.role && <p className="text-xs text-red-500">{fieldErrors.role[0]}</p>}
+          </div>
+
           {/* Checkbox Syarat & Ketentuan */}
           <div className="space-y-1 pt-1">
             <div className="flex items-start gap-2 text-sm">
