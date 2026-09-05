@@ -14,8 +14,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KaryaSetara | Kemampuan Anda, Kesempatan Setara",
-  description: "Platform pencarian kerja inklusif untuk disabilitas dan lansia",
+  title: {
+    default: "KaryaSetara | Kemampuan Anda, Kesempatan Setara",
+    template: "%s | KaryaSetara",
+  },
+  description: "Platform pencarian kerja inklusif untuk disabilitas dan lansia — Smart Matching bitmask + Haversine, Smart Ledger anti-eksploitasi.",
+  keywords: ["KaryaSetara", "inklusif", "disabilitas", "lansia", "lowongan", "pekerjaan", "Smart Matching", "Smart Ledger"],
+  authors: [{ name: "KaryaSetara" }],
+  openGraph: {
+    title: "KaryaSetara | Kemampuan Anda, Kesempatan Setara",
+    description: "Platform gig-economy hyper-inklusif untuk Teman Tuli, Netra, Disabilitas Fisik & Lansia.",
+    locale: "id_ID",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

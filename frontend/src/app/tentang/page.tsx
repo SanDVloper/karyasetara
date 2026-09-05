@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { Target, Heart, Shield } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Tentang Kami",
+  description: "Tentang KaryaSetara: SDG 8 & 11, Matriks Kemampuan bitmasking, Smart Ledger anti-eksploitasi untuk disabilitas & lansia.",
+};
 import BackButton from "@/components/BackButton";
 
 export default function TentangKami() {

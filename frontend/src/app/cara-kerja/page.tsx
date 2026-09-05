@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { UserPlus, Search, Users, CheckCircle, Briefcase, ShieldCheck } from "lucide-react";
 import BackButton from "@/components/BackButton";
+
+export const metadata: Metadata = {
+  title: "Cara Kerja",
+  description: "Alur lengkap KaryaSetara: Employer buat lowongan → Smart Matching (bitmask + Haversine) → Worker terima → Smart Ledger terkunci → selesai.",
+};
 
 export default function CaraKerja() {
   const employerFlow = [

@@ -23,11 +23,9 @@ export default function WorkerSidebar() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(href + "/");
 
   const isNavActive = (item: { label: string; href: string }) => {
-    // 3 item share /worker/my-jobs — harus dibedakan pakai query status
     if (item.label === "Riwayat") return pathname === "/worker/my-jobs" && statusParam === "completed";
     if (item.label === "Pekerjaan Aktif") return pathname === "/worker/my-jobs" && statusParam !== "completed" && !pathname.startsWith("/worker/my-jobs/");
-    // Pembayaran mapping ke /worker/my-jobs juga tapi jangan ikut ter-highlight saat Pekerjaan Aktif aktif
-    if (item.label === "Pembayaran") return false; // sementara non-aktif biar tidak triple highlight; bisa diaktifkan nanti jika punya route sendiri
+    if (item.label === "Pembayaran") return pathname === "/worker/payments" || pathname.startsWith("/worker/payments/");
     return isActive(item.href);
   };
 
@@ -44,7 +42,7 @@ export default function WorkerSidebar() {
     { href: "/worker/my-jobs", label: "Pekerjaan Aktif", icon: ClipboardCheck },
     { href: "/worker/my-jobs", label: "Riwayat", icon: History, query: "?status=completed" },
     { href: "/worker/reports", label: "Pesan", icon: Mail, badge: null },
-    { href: "/worker/my-jobs", label: "Pembayaran", icon: Wallet },
+    { href: "/worker/payments", label: "Pembayaran", icon: Wallet },
     { href: "/worker/profile", label: "Profil", icon: User },
     { href: "/worker/accessibility", label: "Aksesibilitas", icon: Accessibility },
     { href: "/tentang", label: "Bantuan", icon: HelpCircle },

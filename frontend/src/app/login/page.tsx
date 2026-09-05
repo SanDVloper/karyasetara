@@ -4,6 +4,7 @@ import { useState, Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, Eye, ShieldCheck, AlertCircle, Loader2, User, Building2 } from "lucide-react";
+import { getApiUrl } from "@/lib/api";
 
 function LoginInner() {
   const router = useRouter();
@@ -56,7 +57,7 @@ function LoginInner() {
     setGoogleLoading(true);
     setError("");
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = getApiUrl();
       let res = await fetch(`${apiUrl}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -99,7 +100,7 @@ function LoginInner() {
     setGoogleRoleLoading(true);
     setError("");
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = getApiUrl();
       const res = await fetch(`${apiUrl}/api/auth/google`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -155,7 +156,7 @@ function LoginInner() {
 
   const handleGoogleDemoFallback = async () => {
     setGoogleLoading(true);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const apiUrl = getApiUrl();
     const demoEmail = "google_demo@karyasetara.test";
     const demoPassword = "GoogleDemo123!";
     try {
@@ -222,7 +223,7 @@ function LoginInner() {
     setLoading(true);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = getApiUrl();
       const response = await fetch(
         `${apiUrl}/api/auth/login`,
         {
@@ -470,15 +471,13 @@ function LoginInner() {
           </div>
         </div>
 
-        {/* Social Login */}
-        <div className="grid grid-cols-2 gap-3 relative z-10">
-
-          {/* Google — sekarang berfungsi */}
+        {/* Social Login — hanya Google */}
+        <div className="relative z-10">
           <button
             type="button"
             onClick={handleGoogleLogin}
             disabled={loading || googleLoading}
-            className="flex items-center justify-center gap-2 border border-slate-200 rounded-xl py-2.5 hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 border border-slate-200 rounded-xl py-2.5 hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {googleLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
               <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -488,25 +487,7 @@ function LoginInner() {
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
             )}
-            {googleLoading ? "Menghubungkan..." : "Google"}
-          </button>
-
-          {/* Facebook */}
-          <button
-            type="button"
-            className="flex items-center justify-center gap-2 border border-slate-200 rounded-xl py-2.5 hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700"
-          >
-            <svg
-              className="w-5 h-5 text-[#1877F2]"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-              />
-            </svg>
-
-            Facebook
+            {googleLoading ? "Menghubungkan..." : "Masuk dengan Google"}
           </button>
         </div>
 

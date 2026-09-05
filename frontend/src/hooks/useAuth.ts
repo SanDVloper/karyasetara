@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { getApiUrl } from "@/lib/api";
 
 export type AuthUser = {
   id: number;
@@ -55,7 +56,7 @@ export function useAuth() {
     if (JSON.stringify(u) !== JSON.stringify(user)) setUser(u);
     // optional: validate with backend — dengan timeout 3 detik biar tidak bikin loading lama
     if (t) {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = getApiUrl();
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 3000);
       fetch(`${apiUrl}/api/me`, {
@@ -92,7 +93,7 @@ export function useAuth() {
   }, [isAuthenticated]);
 
   const logout = useCallback(async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    const apiUrl = getApiUrl();
     const t = getStoredToken();
     if (t) {
       try {
