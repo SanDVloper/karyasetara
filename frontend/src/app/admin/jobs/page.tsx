@@ -2,11 +2,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Briefcase, Loader2, AlertCircle } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function AdminJobs() {
   const [jobs,setJobs]=useState<any[]>([]);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState<string|null>(null);
+  const [confirmJob,setConfirmJob]=useState<any|null>(null);
+  const [confirmLoading,setConfirmLoading]=useState(false);
   const apiUrl=process.env.NEXT_PUBLIC_API_URL||"http://localhost:8000";
   const getToken=()=>localStorage.getItem("auth_token")||localStorage.getItem("token");
   const fetchJobs=async()=>{
@@ -18,16 +21,19 @@ export default function AdminJobs() {
     setLoading(false);
   };
   useEffect(()=>{ fetchJobs(); },[]);
-  const toggleSuspend=async(j:any)=>{
+  const toggleSuspend=async()=>{
+    if(!confirmJob) return;
+    setConfirmLoading(true);
     const token=getToken();
-    const res=await fetch(`${apiUrl}/api/admin/jobs/${j.id}/suspend`,{
+    const res=await fetch(`${apiUrl}/api/admin/jobs/${confirmJob.id}/suspend`,{
       method:"POST",
       headers:{Authorization:`Bearer ${token}`,"Content-Type":"application/json",Accept:"application/json"},
-      body:JSON.stringify({is_suspended: !j.is_suspended})
+      body:JSON.stringify({is_suspended: !confirmJob.is_suspended})
     });
     const data=await res.json();
-    if(!res.ok) alert(data.message||"Gagal");
-    else fetchJobs();
+    setConfirmLoading(false);
+    if(!res.ok) setError(data.message||"Gagal");
+    else { setConfirmJob(null); fetchJobs(); }
   };
   if(loading) return <div className="flex-1 flex items-center justify-center p-10 bg-slate-900 text-white"><Loader2 className="w-8 h-8 animate-spin"/></div>;
   return (
@@ -51,7 +57,7 @@ export default function AdminJobs() {
                   <td className="py-3 px-4"><span className="px-2 py-1 rounded-full text-xs bg-slate-700">{j.payment_status}</span></td>
                   <td className="py-3 px-4">{j.is_suspended ? <span className="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-300">suspended</span> : <span className="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-300">active</span>}</td>
                   <td className="py-3 px-4 text-right">
-                    <button onClick={()=>toggleSuspend(j)} className={`text-xs px-3 py-1 rounded-lg font-medium ${j.is_suspended?'bg-green-600 text-white':'bg-red-600 text-white'}`}>{j.is_suspended?'Aktifkan':'Suspend'}</button>
+                    <button onClick={()=>setConfirmJob(j)} className={`text-xs px-3 py-1 rounded-lg font-medium ${j.is_suspended?'bg-green-600 text-white':'bg-red-600 text-white'}`}>{j.is_suspended?'Aktifkan':'Suspend'}</button>
                   </td>
                 </tr>
               ))}
@@ -60,6 +66,7 @@ export default function AdminJobs() {
           {jobs.length===0 && <div className="p-8 text-center text-slate-400">Belum ada pekerjaan.</div>}
         </div>
       </div>
+      <ConfirmModal open={!!confirmJob} title={confirmJob?.is_suspended ? "Aktifkan pekerjaan?" : "Suspend pekerjaan?"} description={confirmJob ? (confirmJob.is_suspended ? `Aktifkan "${confirmJob.title}"? Pekerjaan akan kembali bisa dilihat worker.` : `Suspend "${confirmJob.title}"? Pekerjaan tidak akan tampil di rekomendasi & tidak bisa diambil.`) : ""} confirmText={confirmJob?.is_suspended ? "Ya, Aktifkan" : "Ya, Suspend"} variant={confirmJob?.is_suspended ? "success" : "danger"} loading={confirmLoading} onConfirm={toggleSuspend} onClose={()=>setConfirmJob(null)} />
     </div>
   );
 }

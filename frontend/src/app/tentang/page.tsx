@@ -1,9 +1,19 @@
+import type { Metadata } from "next";
 import { Target, Heart, Shield } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Tentang Kami",
+  description: "Tentang KaryaSetara: SDG 8 & 11, Matriks Kemampuan bitmasking, Smart Ledger anti-eksploitasi untuk disabilitas & lansia.",
+};
+import BackButton from "@/components/BackButton";
 
 export default function TentangKami() {
   return (
     <div className="flex-1 bg-white">
+      <div className="container mx-auto px-4 md:px-8 pt-4">
+        <BackButton fallbackHref="/" label="Kembali" />
+      </div>
       <div className="bg-slate-50 py-16 md:py-24 border-b border-slate-200">
         <div className="container mx-auto px-4 md:px-8 text-center max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Mewujudkan <span className="text-primary">Kesetaraan</span> Melalui Teknologi</h1>

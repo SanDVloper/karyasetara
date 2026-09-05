@@ -90,6 +90,8 @@ export default function Register() {
         localStorage.setItem("auth_token", data.data.token);
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
+        localStorage.setItem("last_activity", Date.now().toString());
+        window.dispatchEvent(new Event("auth-change"));
       }
 
       setTimeout(() => {
@@ -119,18 +121,18 @@ export default function Register() {
           </p>
         </div>
 
-        {/* Global Error Alert */}
+        {/* Global Error Alert — aria-live untuk screen reader */}
         {errorMessage && (
-          <div className="mb-5 p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-red-700 text-sm relative z-10">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+          <div role="alert" aria-live="assertive" id="global-error" className="mb-5 p-3.5 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2.5 text-red-700 text-sm relative z-10">
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
             <span>{errorMessage}</span>
           </div>
         )}
 
-        {/* Success Alert */}
+        {/* Success Alert — aria-live polite */}
         {successMessage && (
-          <div className="mb-5 p-3.5 bg-green-50 border border-green-200 rounded-xl flex items-start gap-2.5 text-green-700 text-sm relative z-10">
-            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
+          <div role="status" aria-live="polite" id="global-success" className="mb-5 p-3.5 bg-green-50 border border-green-200 rounded-xl flex items-start gap-2.5 text-green-700 text-sm relative z-10">
+            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
             <span>{successMessage}</span>
           </div>
         )}
@@ -138,17 +140,21 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
           {/* Nama Lengkap */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 block">Nama Lengkap</label>
+            <label htmlFor="reg-name" className="text-sm font-medium text-slate-700 block">Nama Lengkap</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <User className="w-5 h-5 text-slate-400" />
+                <User className="w-5 h-5 text-slate-400" aria-hidden="true" />
               </div>
               <input 
+                id="reg-name"
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                aria-invalid={!!fieldErrors.name}
+                aria-describedby={fieldErrors.name ? "error-name" : undefined}
                 placeholder="Masukkan nama lengkap" 
                 className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.name ? "border-red-400 focus:ring-red-200" : "border-slate-300 focus:ring-primary/20 focus:border-primary"
@@ -156,23 +162,27 @@ export default function Register() {
               />
             </div>
             {fieldErrors.name && (
-              <p className="text-xs text-red-500 mt-1">{fieldErrors.name[0]}</p>
+              <p id="error-name" role="alert" className="text-xs text-red-500 mt-1">{fieldErrors.name[0]}</p>
             )}
           </div>
 
           {/* Email */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 block">Email</label>
+            <label htmlFor="reg-email" className="text-sm font-medium text-slate-700 block">Email</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Mail className="w-5 h-5 text-slate-400" />
+                <Mail className="w-5 h-5 text-slate-400" aria-hidden="true" />
               </div>
               <input 
+                id="reg-email"
                 type="email" 
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                aria-invalid={!!fieldErrors.email}
+                aria-describedby={fieldErrors.email ? "error-email" : undefined}
                 placeholder="nama@email.com" 
                 className={`w-full pl-10 pr-4 py-3 bg-white border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.email ? "border-red-400 focus:ring-red-200" : "border-slate-300 focus:ring-primary/20 focus:border-primary"
@@ -180,23 +190,27 @@ export default function Register() {
               />
             </div>
             {fieldErrors.email && (
-              <p className="text-xs text-red-500 mt-1">{fieldErrors.email[0]}</p>
+              <p id="error-email" role="alert" className="text-xs text-red-500 mt-1">{fieldErrors.email[0]}</p>
             )}
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 block">Password</label>
+            <label htmlFor="reg-password" className="text-sm font-medium text-slate-700 block">Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Lock className="w-5 h-5 text-slate-400" />
+                <Lock className="w-5 h-5 text-slate-400" aria-hidden="true" />
               </div>
               <input 
+                id="reg-password"
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                aria-invalid={!!fieldErrors.password}
+                aria-describedby={fieldErrors.password ? "error-password" : "hint-password"}
                 placeholder="Buat password (min. 8 karakter)" 
                 className={`w-full pl-10 pr-10 py-3 bg-white border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.password ? "border-red-400 focus:ring-red-200" : "border-slate-300 focus:ring-primary/20 focus:border-primary"
@@ -204,30 +218,36 @@ export default function Register() {
               />
               <button 
                 type="button" 
+                aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? <EyeOff className="w-5 h-5" aria-hidden="true" /> : <Eye className="w-5 h-5" aria-hidden="true" />}
               </button>
             </div>
+            <p id="hint-password" className="text-xs text-slate-500 mt-1">Minimal 8 karakter, kombinasi huruf & angka disarankan.</p>
             {fieldErrors.password && (
-              <p className="text-xs text-red-500 mt-1">{fieldErrors.password[0]}</p>
+              <p id="error-password" role="alert" className="text-xs text-red-500 mt-1">{fieldErrors.password[0]}</p>
             )}
           </div>
 
           {/* Konfirmasi Password */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-slate-700 block">Konfirmasi Password</label>
+            <label htmlFor="reg-password-confirm" className="text-sm font-medium text-slate-700 block">Konfirmasi Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Lock className="w-5 h-5 text-slate-400" />
+                <Lock className="w-5 h-5 text-slate-400" aria-hidden="true" />
               </div>
               <input 
+                id="reg-password-confirm"
                 type={showConfirmPassword ? "text" : "password"}
                 name="password_confirmation"
                 value={formData.password_confirmation}
                 onChange={handleChange}
                 required
+                aria-required="true"
+                aria-invalid={!!fieldErrors.password_confirmation}
+                aria-describedby={fieldErrors.password_confirmation ? "error-password-confirm" : undefined}
                 placeholder="Konfirmasi password" 
                 className={`w-full pl-10 pr-10 py-3 bg-white border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all ${
                   fieldErrors.password_confirmation ? "border-red-400 focus:ring-red-200" : "border-slate-300 focus:ring-primary/20 focus:border-primary"
@@ -235,14 +255,15 @@ export default function Register() {
               />
               <button 
                 type="button" 
+                aria-label={showConfirmPassword ? "Sembunyikan konfirmasi password" : "Tampilkan konfirmasi password"}
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600"
               >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" aria-hidden="true" /> : <Eye className="w-5 h-5" aria-hidden="true" />}
               </button>
             </div>
             {fieldErrors.password_confirmation && (
-              <p className="text-xs text-red-500 mt-1">{fieldErrors.password_confirmation[0]}</p>
+              <p id="error-password-confirm" role="alert" className="text-xs text-red-500 mt-1">{fieldErrors.password_confirmation[0]}</p>
             )}
           </div>
 

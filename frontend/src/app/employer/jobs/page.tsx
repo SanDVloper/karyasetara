@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PlusCircle, Loader2, ChevronRight, Building2, Users } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export default function EmployerJobsList() {
   const router=useRouter();
@@ -34,6 +35,7 @@ export default function EmployerJobsList() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-5xl mx-auto space-y-6">
+        <BackButton fallbackHref="/employer/dashboard" label="Kembali ke Dashboard" />
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2"><Building2 className="w-6 h-6 text-primary"/> Pekerjaan Saya</h1>

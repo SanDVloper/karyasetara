@@ -3,6 +3,7 @@
 import { Check, MapPin, User, Accessibility, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import BackButton from "@/components/BackButton";
 
 export default function WorkerProfile() {
   const router = useRouter();
@@ -131,7 +132,7 @@ export default function WorkerProfile() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        
+        <BackButton fallbackHref="/worker/dashboard" label="Kembali ke Dashboard" />
         <header className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <User className="w-8 h-8 text-primary" />

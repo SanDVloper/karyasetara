@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Building2, MapPin, Loader2, Check, AlertCircle, CheckCircle2 } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export default function EmployerProfile() {
   const router = useRouter();
@@ -52,6 +53,7 @@ export default function EmployerProfile() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-3xl mx-auto space-y-6">
+        <BackButton fallbackHref="/employer/dashboard" label="Kembali ke Dashboard" />
         <header className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
           <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center"><Building2 className="w-7 h-7 text-primary"/></div>
           <div>

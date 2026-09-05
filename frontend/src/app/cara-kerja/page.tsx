@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { UserPlus, Search, Users, CheckCircle, Briefcase, ShieldCheck } from "lucide-react";
+import BackButton from "@/components/BackButton";
+
+export const metadata: Metadata = {
+  title: "Cara Kerja",
+  description: "Alur lengkap KaryaSetara: Employer buat lowongan → Smart Matching (bitmask + Haversine) → Worker terima → Smart Ledger terkunci → selesai.",
+};
 
 export default function CaraKerja() {
   const employerFlow = [
@@ -18,6 +25,9 @@ export default function CaraKerja() {
   ];
   return (
     <div className="flex-1 bg-white">
+      <div className="container mx-auto px-4 md:px-8 pt-4">
+        <BackButton fallbackHref="/" label="Kembali" />
+      </div>
       <div className="bg-slate-50 py-16 border-b border-slate-200">
         <div className="container mx-auto px-4 md:px-8 max-w-5xl text-center">
           <h1 className="text-4xl font-bold text-slate-900">Cara Kerja <span className="text-primary">KaryaSetara</span></h1>
@@ -69,7 +79,7 @@ export default function CaraKerja() {
           <b>Bitmasking:</b> kemampuan 1=Visual,2=Audio,4=Motorik,8=Komunikasi. Worker 15 (1111) cocok untuk job 9 (1001). Query SQL: <code className="bg-slate-100 px-1 rounded">(required_capability_bitmask & worker_mask) = required</code>.<br/>
           <b>Haversine:</b> jarak aman radius 5km untuk pekerja rentan. <b>Priority Score:</b> 60 skill + 40 jarak + fairness. <b>Smart Ledger:</b> PostgreSQL trigger <code className="bg-slate-100 px-1 rounded">check_wage_tampering()</code> — upah locked saat worker_id terisi, exception jika diubah.
         </p>
-        <Link href="/" className="inline-block mt-6 text-primary hover:underline text-sm">← Kembali ke Beranda</Link>
+        <BackButton fallbackHref="/" label="Kembali ke Beranda" className="mt-6 mx-auto" />
       </div>
     </div>
   );
