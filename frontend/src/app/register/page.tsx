@@ -90,6 +90,8 @@ export default function Register() {
         localStorage.setItem("auth_token", data.data.token);
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.data.user));
+        localStorage.setItem("last_activity", Date.now().toString());
+        window.dispatchEvent(new Event("auth-change"));
       }
 
       setTimeout(() => {

@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import { Loader2, AlertCircle, CheckCircle, ShieldAlert } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
+import BackButton from "@/components/BackButton";
 
 export default function AdminReportDetail() {
   const { id } = useParams<{id:string}>();
@@ -13,6 +14,7 @@ export default function AdminReportDetail() {
   const [error,setError]=useState<string|null>(null);
   const [msg,setMsg]=useState<string|null>(null);
   const [form,setForm]=useState({ status:"pending", admin_notes:"", action:"none" });
+  const [confirmOpen,setConfirmOpen]=useState(false);
   const apiUrl=process.env.NEXT_PUBLIC_API_URL||"http://localhost:8000";
   const getToken=()=>localStorage.getItem("auth_token")||localStorage.getItem("token");
 
@@ -49,7 +51,7 @@ export default function AdminReportDetail() {
   return (
     <div className="flex-1 bg-slate-900 min-h-screen p-6 text-slate-100">
       <div className="max-w-4xl mx-auto space-y-6">
-        <Link href="/admin/reports" className="text-slate-400 hover:text-white text-sm">← Semua Laporan</Link>
+        <BackButton fallbackHref="/admin/reports" label="Kembali" className="text-slate-300 hover:text-white hover:bg-slate-800 border-slate-700" />
         <header className="bg-slate-800 p-6 rounded-2xl border border-slate-700">
           <h1 className="text-2xl font-bold flex items-center gap-2"><ShieldAlert className="w-6 h-6 text-red-400"/> Laporan #{report.id}</h1>
           <p className="text-slate-400 text-sm mt-1">Pelapor: {report.reporter?.name} ({report.reporter?.email}) → Employer: {report.employer?.name || '-'} • Job: {report.job?.title || '-'}</p>
@@ -95,11 +97,12 @@ export default function AdminReportDetail() {
             <label className="block text-sm text-slate-400 mb-1">Catatan Admin</label>
             <textarea value={form.admin_notes} onChange={e=>setForm({...form,admin_notes:e.target.value})} rows={3} className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white" placeholder="Hasil investigasi..."/>
           </div>
-          <button onClick={handleUpdate} disabled={saving} className="w-full bg-red-600 text-white font-bold py-3 rounded-xl hover:bg-red-700 flex items-center justify-center gap-2 disabled:opacity-60">
+          <button onClick={()=>setConfirmOpen(true)} disabled={saving} className="w-full bg-red-600 text-white font-bold py-3 rounded-xl hover:bg-red-700 flex items-center justify-center gap-2 disabled:opacity-60">
             {saving?<Loader2 className="w-5 h-5 animate-spin"/>: <ShieldAlert className="w-5 h-5"/>} Simpan Keputusan Moderasi
           </button>
         </section>
       </div>
+      <ConfirmModal open={confirmOpen} title={form.action==="suspend_employer" || form.action==="suspend_job" ? "Konfirmasi tindakan tegas?" : "Simpan keputusan moderasi?"} description={form.action==="suspend_employer" ? `Nonaktifkan akun employer ${report.employer?.name}? Employer tidak bisa login & semua lowongannya terdampak.` : form.action==="suspend_job" ? `Nonaktifkan pekerjaan "${report.job?.title}"? Pekerjaan akan di-suspend.` : `Ubah status laporan #${report.id} jadi "${form.status}" dengan aksi "${form.action}"?`} confirmText={form.action.includes("suspend") ? "Ya, Lanjutkan" : "Ya, Simpan"} variant={form.action.includes("suspend") ? "danger" : "primary"} loading={saving} onConfirm={async()=>{ setConfirmOpen(false); await handleUpdate(); }} onClose={()=>setConfirmOpen(false)} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ShieldAlert, Loader2, AlertCircle } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export default function AdminReports() {
   const [reports,setReports]=useState<any[]>([]);
@@ -24,7 +25,7 @@ export default function AdminReports() {
   return (
     <div className="flex-1 bg-slate-900 min-h-screen p-6 text-slate-100">
       <div className="max-w-6xl mx-auto space-y-6">
-        <Link href="/admin/dashboard" className="text-slate-400 text-sm hover:text-white">← Dashboard</Link>
+        <BackButton fallbackHref="/admin/dashboard" label="Kembali ke Dashboard" className="text-slate-300 hover:text-white hover:bg-slate-800 border-slate-700" />
         <h1 className="text-2xl font-bold flex items-center gap-2"><ShieldAlert className="w-6 h-6 text-red-400"/> Semua Laporan (Trust & Safety)</h1>
         {error && <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-xl flex gap-2"><AlertCircle className="w-5 h-5"/>{error}</div>}
         <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">

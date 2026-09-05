@@ -1,7 +1,11 @@
+"use client";
 import Link from "next/link";
+import { useState } from "react";
 import { Building, Search, ArrowLeft, Ban, ShieldCheck, MapPin, Briefcase } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
 
 export default function AdminEmployersPage() {
+  const [confirmEmp, setConfirmEmp] = useState<any|null>(null);
   const employers = [
     { id: "EMP-001", name: "PT Maju Bersama", email: "hr@majubersama.co.id", jobs: 5, status: "Aktif", color: "bg-green-500/10 text-green-400 border-green-500/20", loc: "-6.20, 106.81" },
     { id: "EMP-002", name: "Tech Inklusif", email: "contact@techinklusif.id", jobs: 3, status: "Peringatan", color: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20", loc: "-6.21, 106.82" },
@@ -52,7 +56,7 @@ export default function AdminEmployersPage() {
                     <td className="py-4 px-4 text-right">
                       <div className="flex justify-end gap-2">
                         <button className="text-xs border border-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-700 inline-flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Detail</button>
-                        <button className="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 inline-flex items-center gap-1"><Ban className="w-3 h-3" /> Nonaktifkan</button>
+                        <button onClick={()=>setConfirmEmp(e)} className="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 inline-flex items-center gap-1"><Ban className="w-3 h-3" /> Nonaktifkan</button>
                       </div>
                     </td>
                   </tr>
@@ -62,6 +66,7 @@ export default function AdminEmployersPage() {
           </div>
         </div>
       </div>
+      <ConfirmModal open={!!confirmEmp} title="Nonaktifkan employer?" description={confirmEmp ? `Nonaktifkan "${confirmEmp.name}" (${confirmEmp.email})? Akun tidak bisa login & lowongannya akan terdampak. Aksi sesuai UC-15.` : ""} confirmText="Ya, Nonaktifkan" variant="danger" onConfirm={()=>setConfirmEmp(null)} onClose={()=>setConfirmEmp(null)} />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Flag, Loader2, AlertCircle, Upload } from "lucide-react";
-import Link from "next/link";
+import BackButton from "@/components/BackButton";
 
 export default function CreateReport() {
   const router=useRouter();
@@ -40,7 +40,7 @@ export default function CreateReport() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-2xl mx-auto space-y-6">
-        <Link href="/worker/reports" className="text-sm text-slate-600 hover:text-slate-900">← Kembali ke Laporan</Link>
+        <BackButton fallbackHref="/worker/reports" label="Kembali ke Laporan" />
         <header className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2"><Flag className="w-6 h-6 text-primary"/> Buat Laporan</h1>
           <p className="text-slate-600 text-sm">Laporkan pekerjaan/employer bermasalah. Admin akan meninjau (UC-13).</p>

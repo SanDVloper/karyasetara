@@ -3,6 +3,7 @@
 import { Briefcase, DollarSign, Accessibility, MapPin, Loader2, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import BackButton from "@/components/BackButton";
 
 export default function CreateJob() {
   const router = useRouter();
@@ -85,7 +86,9 @@ export default function CreateJob() {
 
   return (
     <div className="flex-1 bg-slate-50 p-6 py-10">
-      <div className="max-w-3xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="max-w-3xl mx-auto space-y-4">
+        <BackButton fallbackHref="/employer/jobs" label="Kembali" />
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         
         <div className="bg-primary p-6 text-white">
           <h1 className="text-2xl font-bold mb-1">Buat Lowongan Pekerjaan Baru</h1>
@@ -230,6 +233,7 @@ export default function CreateJob() {
           </div>
 
         </form>
+      </div>
       </div>
     </div>
   );

@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, AlertTriangle, Briefcase, MapPin, Loader2, AlertCircle, ArrowLeft, Users } from "lucide-react";
+import { CheckCircle, AlertTriangle, Briefcase, MapPin, Loader2, AlertCircle, Users } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
+import BackButton from "@/components/BackButton";
 
 export default function EmployerJobDetail() {
   const { id } = useParams<{id:string}>();
@@ -10,6 +12,7 @@ export default function EmployerJobDetail() {
   const [job, setJob] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [error, setError] = useState<string|null>(null);
   const [message, setMessage] = useState<string|null>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -47,7 +50,7 @@ export default function EmployerJobDetail() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        <Link href="/employer/dashboard" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900"><ArrowLeft className="w-4 h-4"/> Kembali ke Dashboard</Link>
+        <BackButton fallbackHref="/employer/dashboard" label="Kembali" />
         {message && <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl flex gap-2"><CheckCircle className="w-5 h-5"/>{message}</div>}
         {error && <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex gap-2"><AlertCircle className="w-5 h-5"/>{error}</div>}
 
@@ -88,7 +91,7 @@ export default function EmployerJobDetail() {
             <p className="text-slate-600 max-w-md mx-auto mt-2 mb-8">
               Jika pekerja telah menyelesaikan tugasnya dengan baik, klik tombol di bawah ini. Upah yang terkunci di Smart Ledger akan otomatis dicairkan ke saldo pekerja.
             </p>
-            <button onClick={confirmCompletion} disabled={confirmLoading} className="bg-green-600 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-green-700 shadow-lg shadow-green-500/30 transition-all text-lg flex items-center gap-2 mx-auto disabled:opacity-60">
+            <button onClick={()=>setConfirmOpen(true)} disabled={confirmLoading} className="bg-green-600 text-white font-bold px-8 py-3.5 rounded-xl hover:bg-green-700 shadow-lg shadow-green-500/30 transition-all text-lg flex items-center gap-2 mx-auto disabled:opacity-60">
               {confirmLoading? <Loader2 className="w-6 h-6 animate-spin"/>: <CheckCircle className="w-6 h-6" />}
               Konfirmasi Selesai & Cairkan Dana
             </button>
@@ -108,6 +111,7 @@ export default function EmployerJobDetail() {
         </section>
 
       </div>
+      <ConfirmModal open={confirmOpen} title="Konfirmasi selesai & cairkan dana?" description={`Konfirmasi bahwa "${job.title}" sudah selesai dengan baik? Upah Rp ${wage} yang terkunci akan dicairkan ke pekerja & status jadi Completed. Tidak bisa dibatalkan.`} confirmText="Ya, Konfirmasi & Cairkan" variant="success" loading={confirmLoading} onConfirm={async()=>{ setConfirmOpen(false); await confirmCompletion(); }} onClose={()=>setConfirmOpen(false)} />
     </div>
   );
 }

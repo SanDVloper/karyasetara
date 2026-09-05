@@ -27,11 +27,13 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/google', [AuthController::class, 'google']);
 });
 
 // Also provide direct /register and /login aliases for flexibility
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/auth/google', [AuthController::class, 'google']);
 
 // Protected Routes (Sanctum)
 Route::middleware('auth:sanctum')->group(function () {

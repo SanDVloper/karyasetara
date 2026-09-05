@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, CheckCircle, ShieldCheck, Loader2, AlertCircle } from "lucide-react";
+import { MapPin, CheckCircle, ShieldCheck, Loader2, AlertCircle } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
+import BackButton from "@/components/BackButton";
 
 export default function CandidatesList() {
   const { id } = useParams<{id:string}>();
@@ -13,6 +15,7 @@ export default function CandidatesList() {
   const [selecting, setSelecting] = useState<number|null>(null);
   const [error, setError] = useState<string|null>(null);
   const [message, setMessage] = useState<string|null>(null);
+  const [confirmWorker, setConfirmWorker] = useState<any|null>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   const getToken = () => localStorage.getItem("auth_token") || localStorage.getItem("token");
 
@@ -63,8 +66,8 @@ export default function CandidatesList() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-5xl mx-auto space-y-6">
-        <div className="flex items-center gap-4 mb-6">
-          <Link href={`/employer/jobs/${id}`} className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-600"><ArrowLeft className="w-6 h-6" /></Link>
+        <BackButton fallbackHref={`/employer/jobs/${id}`} label="Kembali ke Detail" />
+        <div className="flex items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Kandidat Teratas</h1>
             <p className="text-slate-600">{job?.title || "Pekerjaan"} (Match hasil Min-Heap & Haversine)</p>
@@ -94,7 +97,7 @@ export default function CandidatesList() {
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 justify-center">
-                  <button onClick={()=>selectWorker(c.id)} disabled={!!selecting} className={`${idx===0?'bg-primary text-white hover:bg-primary-hover shadow-lg shadow-blue-500/30':'bg-slate-100 text-slate-800 hover:bg-slate-200'} font-bold px-6 py-2.5 rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2`}>
+                  <button onClick={()=>setConfirmWorker(c)} disabled={!!selecting} className={`${idx===0?'bg-primary text-white hover:bg-primary-hover shadow-lg shadow-blue-500/30':'bg-slate-100 text-slate-800 hover:bg-slate-200'} font-bold px-6 py-2.5 rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2`}>
                     {selecting===c.id ? <Loader2 className="w-5 h-5 animate-spin"/> : null} Pilih Pekerja Ini
                   </button>
                   <span className="text-xs text-slate-500 text-center">Skor Prioritas: {Math.max(0, 1000 - (Number(c.distance||0)*10)).toFixed(0)}</span>
@@ -104,6 +107,16 @@ export default function CandidatesList() {
           ))}
         </div>
       </div>
+      <ConfirmModal
+        open={!!confirmWorker}
+        title="Pilih pekerja ini?"
+        description={confirmWorker ? `Pilih ${confirmWorker.name} untuk "${job?.title || "pekerjaan ini"}"? Status akan jadi Menunggu Penerimaan & upah terkunci di Smart Ledger. Aksi tidak bisa dibatalkan.` : ""}
+        confirmText="Ya, Pilih"
+        variant="primary"
+        loading={!!selecting}
+        onConfirm={()=>{ if(confirmWorker){ selectWorker(confirmWorker.id); setConfirmWorker(null);} }}
+        onClose={()=>setConfirmWorker(null)}
+      />
     </div>
   );
 }

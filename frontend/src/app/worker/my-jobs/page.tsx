@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Clock, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import BackButton from "@/components/BackButton";
 
 export default function MyJobs() {
   const router = useRouter();
@@ -54,7 +55,7 @@ export default function MyJobs() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        
+        <BackButton fallbackHref="/worker/dashboard" label="Kembali ke Dashboard" />
         <header className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
           <h1 className="text-2xl font-bold text-slate-900">Pekerjaan Saya</h1>
           <p className="text-slate-600">Pantau status pekerjaan yang sedang Anda tangani.</p>

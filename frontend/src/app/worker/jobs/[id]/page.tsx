@@ -2,7 +2,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { MapPin, Briefcase, DollarSign, CheckCircle, XCircle, AlertCircle, Loader2, ArrowLeft } from "lucide-react";
+import { MapPin, Briefcase, DollarSign, CheckCircle, XCircle, AlertCircle, Loader2 } from "lucide-react";
+import ConfirmModal from "@/components/ConfirmModal";
+import BackButton from "@/components/BackButton";
 
 export default function WorkerJobDetail() {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +14,7 @@ export default function WorkerJobDetail() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<"accept"|"reject"|"complete"|null>(null);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -60,7 +63,7 @@ export default function WorkerJobDetail() {
   };
 
   if (loading) return <div className="flex-1 flex items-center justify-center p-10"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>;
-  if (error && !job) return <div className="flex-1 p-6 max-w-3xl mx-auto"><div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex gap-2"><AlertCircle className="w-5 h-5"/>{error}</div><Link href="/worker/jobs" className="mt-4 inline-flex items-center gap-2 text-primary hover:underline"><ArrowLeft className="w-4 h-4"/> Kembali</Link></div>;
+  if (error && !job) return <div className="flex-1 p-6 max-w-3xl mx-auto"><div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex gap-2"><AlertCircle className="w-5 h-5"/>{error}</div><div className="mt-4"><BackButton fallbackHref="/worker/jobs" label="Kembali ke Rekomendasi" /></div></div>;
   if (!job) return null;
 
   const status = job.status;
@@ -69,7 +72,7 @@ export default function WorkerJobDetail() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-3xl mx-auto space-y-6">
-        <Link href="/worker/jobs" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900"><ArrowLeft className="w-4 h-4"/> Kembali ke Rekomendasi</Link>
+        <BackButton fallbackHref="/worker/jobs" label="Kembali" />
 
         {message && <div className="p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl flex gap-2"><CheckCircle className="w-5 h-5"/>{message}</div>}
         {error && <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex gap-2"><AlertCircle className="w-5 h-5"/>{error}</div>}
@@ -92,12 +95,12 @@ export default function WorkerJobDetail() {
           <div className="mt-8 flex flex-wrap gap-3">
             {status === "waiting_acceptance" && (
               <>
-                <button onClick={()=>callAction("accept")} disabled={!!actionLoading} className="flex-1 bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary-hover disabled:opacity-60 flex items-center justify-center gap-2">{actionLoading==="accept"?<Loader2 className="w-5 h-5 animate-spin"/>:<CheckCircle className="w-5 h-5"/>} Terima Pekerjaan</button>
-                <button onClick={()=>callAction("reject")} disabled={!!actionLoading} className="px-6 py-3 border border-slate-300 rounded-xl font-semibold hover:bg-slate-50 disabled:opacity-60 flex items-center gap-2">{actionLoading==="reject"?<Loader2 className="w-5 h-5 animate-spin"/>:<XCircle className="w-5 h-5"/>} Tolak</button>
+                <button onClick={()=>setPendingAction("accept")} disabled={!!actionLoading} className="flex-1 bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary-hover disabled:opacity-60 flex items-center justify-center gap-2">{actionLoading==="accept"?<Loader2 className="w-5 h-5 animate-spin"/>:<CheckCircle className="w-5 h-5"/>} Terima Pekerjaan</button>
+                <button onClick={()=>setPendingAction("reject")} disabled={!!actionLoading} className="px-6 py-3 border border-slate-300 rounded-xl font-semibold hover:bg-slate-50 disabled:opacity-60 flex items-center gap-2">{actionLoading==="reject"?<Loader2 className="w-5 h-5 animate-spin"/>:<XCircle className="w-5 h-5"/>} Tolak</button>
               </>
             )}
             {status === "active" && (
-              <button onClick={()=>callAction("complete")} disabled={!!actionLoading} className="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 disabled:opacity-60 flex items-center justify-center gap-2">{actionLoading==="complete"?<Loader2 className="w-5 h-5 animate-spin"/>:<CheckCircle className="w-5 h-5"/>} Tandai Selesai</button>
+              <button onClick={()=>setPendingAction("complete")} disabled={!!actionLoading} className="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 disabled:opacity-60 flex items-center justify-center gap-2">{actionLoading==="complete"?<Loader2 className="w-5 h-5 animate-spin"/>:<CheckCircle className="w-5 h-5"/>} Tandai Selesai</button>
             )}
             {status === "pending" && <p className="text-sm text-slate-500 bg-slate-50 p-3 rounded-xl w-full text-center">Menunggu employer memilih kandidat. Anda akan menerima penawaran jika terpilih.</p>}
             {status === "waiting_confirmation" && <p className="text-sm text-orange-700 bg-orange-50 p-3 rounded-xl w-full text-center">Menunggu konfirmasi employer. Pembayaran akan diproses setelah dikonfirmasi.</p>}
@@ -105,6 +108,9 @@ export default function WorkerJobDetail() {
           </div>
         </div>
       </div>
+      <ConfirmModal open={pendingAction==="accept"} title="Terima pekerjaan ini?" description={`Terima "${job.title}"? Upah Rp ${wage} akan TERKUNCI di Smart Ledger & status jadi Aktif.`} confirmText="Ya, Terima" variant="primary" loading={actionLoading==="accept"} onConfirm={()=>{ const a="accept"; setPendingAction(null); callAction(a); }} onClose={()=>setPendingAction(null)} />
+      <ConfirmModal open={pendingAction==="reject"} title="Tolak tawaran?" description="Tolak tawaran? Pekerjaan akan ditawarkan ke kandidat lain dan tidak bisa dibatalkan." confirmText="Ya, Tolak" variant="warning" loading={actionLoading==="reject"} onConfirm={()=>{ const a="reject"; setPendingAction(null); callAction(a); }} onClose={()=>setPendingAction(null)} />
+      <ConfirmModal open={pendingAction==="complete"} title="Tandai selesai?" description="Tandai selesai? Employer akan diminta konfirmasi & payment akan jadi Waiting Confirmation." confirmText="Ya, Selesai" variant="success" loading={actionLoading==="complete"} onConfirm={()=>{ const a="complete"; setPendingAction(null); callAction(a); }} onClose={()=>setPendingAction(null)} />
     </div>
   );
 }

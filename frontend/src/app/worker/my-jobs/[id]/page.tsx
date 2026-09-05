@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { CheckCircle, AlertTriangle, Building, MapPin } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export default function WorkerJobDetail() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         
+        <BackButton fallbackHref="/worker/my-jobs" label="Kembali" className="mb-2" />
         <header className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <Link href="/worker/jobs" className="text-sm font-medium text-slate-500 hover:text-primary mb-6 inline-block">&larr; Kembali ke Rekomendasi</Link>
           
           <div className="flex justify-between items-start">
             <div>
