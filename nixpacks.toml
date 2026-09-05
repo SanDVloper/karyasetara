@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["php", "php82Packages.composer", "nodejs_20"]
+
+[phases.install]
+cmds = ["cd backend && composer install --no-dev --optimize-autoloader", "cd backend && npm install"]
+
+[phases.build]
+cmds = ["cd backend && npm run build || echo 'no build needed'"]
+
+[start]
+cmd = "cd backend && php artisan migrate --force && php artisan config:cache && php -S 0.0.0.0:$PORT -t public"
