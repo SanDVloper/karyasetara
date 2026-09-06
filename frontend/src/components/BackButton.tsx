@@ -6,13 +6,19 @@ export default function BackButton({
   fallbackHref = "/",
   label = "Kembali",
   className = "",
+  forceFallback = false,
 }: {
   fallbackHref?: string;
   label?: string;
   className?: string;
+  forceFallback?: boolean;
 }) {
   const router = useRouter();
   const handleBack = () => {
+    if (forceFallback) {
+      router.push(fallbackHref);
+      return;
+    }
     if (typeof window !== "undefined" && window.history.length > 1) {
       router.back();
     } else {

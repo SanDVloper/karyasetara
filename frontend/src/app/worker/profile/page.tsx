@@ -4,11 +4,13 @@ import { Check, MapPin, User, Accessibility, Loader2, AlertCircle, CheckCircle2 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/BackButton";
+import MapPicker from "@/components/MapPicker";
 
 export default function WorkerProfile() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [message, setMessage] = useState<{type: 'error'|'success', text: string} | null>(null);
 
   const [profile, setProfile] = useState({
@@ -132,7 +134,7 @@ export default function WorkerProfile() {
   return (
     <div className="flex-1 bg-slate-50 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        <BackButton fallbackHref="/worker/dashboard" label="Kembali ke Dashboard" />
+        <BackButton fallbackHref="/worker/dashboard" label="Kembali ke Dashboard" forceFallback />
         <header className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <User className="w-8 h-8 text-primary" />
@@ -157,7 +159,7 @@ export default function WorkerProfile() {
               <h2 className="font-bold text-lg text-slate-900">Matriks Kemampuan</h2>
             </div>
             
-            <p className="text-sm text-slate-500">Pilih kemampuan yang Anda miliki secara optimal (Bitmasking):</p>
+            <p className="text-sm text-slate-500">Pilih keahlian yang Anda miliki:</p>
             
             <div className="space-y-3">
               {capabilities.map((cap) => {
@@ -220,9 +222,13 @@ export default function WorkerProfile() {
                     />
                   </div>
                 </div>
+                <button type="button" onClick={()=>setShowMap(true)} className="w-full text-sm font-medium text-white bg-primary py-2.5 rounded-xl hover:bg-primary-hover flex items-center justify-center gap-2">
+                  <MapPin className="w-4 h-4"/> Pilih Titik di Peta
+                </button>
                 <button type="button" onClick={getLocation} className="w-full text-sm font-medium text-primary bg-blue-50 py-2 rounded-lg hover:bg-blue-100">
                   Ambil Lokasi Saat Ini (GPS)
                 </button>
+                <p className="text-xs text-slate-500 text-center">Atau isi manual latitude/longitude di bawah — keduanya tetap didukung.</p>
               </div>
             </section>
 
@@ -238,6 +244,7 @@ export default function WorkerProfile() {
         </div>
 
       </div>
+      <MapPicker open={showMap} lat={profile.latitude} lng={profile.longitude} onClose={()=>setShowMap(false)} onPick={(nlat,nlng,addr)=> setProfile(p=>({ ...p, latitude: nlat.toString(), longitude: nlng.toString(), address: addr || p.address }))} />
     </div>
   );
 }
