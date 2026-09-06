@@ -502,14 +502,7 @@ function LoginInner() {
           </Link>
         </p>
 
-        {/* Security Badge */}
-        <div className="hidden md:flex absolute bottom-6 -left-32 items-center gap-2 text-xs text-slate-500">
-          <ShieldCheck className="w-5 h-5 text-primary" />
-
-          <span>
-            Keamanan data Anda adalah prioritas kami.
-          </span>
-        </div>
+       
       </div>
       {/* Role picker untuk Google smart login — popup pilih role */}
       {showRolePicker && (

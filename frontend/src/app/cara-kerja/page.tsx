@@ -5,23 +5,23 @@ import BackButton from "@/components/BackButton";
 
 export const metadata: Metadata = {
   title: "Cara Kerja",
-  description: "Alur lengkap KaryaSetara: Employer buat lowongan → Smart Matching (bitmask + Haversine) → Worker terima → Smart Ledger terkunci → selesai.",
+  description: "Alur lengkap KaryaSetara: Perusahaan buat lowongan → Pencocokan Keahlian & Jarak → Pekerja terima → Dana Aman terkunci → selesai.",
 };
 
 export default function CaraKerja() {
   const employerFlow = [
-    { step: "1", title: "Daftar & Login Employer", desc: "Buat akun perusahaan dengan role employer." },
-    { step: "2", title: "Buat Pekerjaan", desc: 'Isi judul, deskripsi, kemampuan dibutuhkan (bitmask), lokasi, dan upah Rp (Smart Ledger).' },
-    { step: "3", title: "Sistem Matching", desc: "ALGORITMA: Skill Matching (bitwise AND) + Haversine jarak + Priority Score → Match Score." },
-    { step: "4", title: "Lihat Kandidat", desc: "Daftar terurut: 92% Made (1.2km), prioritas 988, kemampuan 5/5 terpenuhi." },
-    { step: "5", title: "Pilih Worker", desc: "Klik Pilih → status waiting_acceptance." },
+    { step: "1", title: "Daftar & Login Perusahaan", desc: "Buat akun perusahaan." },
+    { step: "2", title: "Buat Pekerjaan", desc: 'Isi judul, deskripsi, keahlian yang dibutuhkan, lokasi, dan upah (Dana Aman).' },
+    { step: "3", title: "Pencocokan Otomatis", desc: "Sistem mencocokkan keahlian dan jarak terdekat → Skor Kecocokan." },
+    { step: "4", title: "Lihat Kandidat", desc: "Daftar terurut: 92% Made (1.2 km), 5/5 keahlian terpenuhi." },
+    { step: "5", title: "Pilih Pekerja", desc: "Klik Pilih → menunggu persetujuan pekerja." },
   ];
   const workerFlow = [
-    { step: "1", title: "Lengkapi Profil", desc: "Pilih kemampuan (Visual/Audio/Motorik/Komunikasi), isi alamat & GPS, atur aksesibilitas." },
-    { step: "2", title: "Dapat Rekomendasi", desc: "Halaman /worker/jobs menampilkan pekerjaan pending dengan jarak terdekat." },
-    { step: "3", title: "Terima / Tolak", desc: "Jika dipilih employer, terima → status active (upah locked)." },
-    { step: "4", title: "Kerjakan & Selesai", desc: "Tandai selesai → waiting_confirmation." },
-    { step: "5", title: "Employer Konfirmasi → Pembayaran Diproses", desc: "Employer confirm → completed & payment processing (anti-tamper trigger)." },
+    { step: "1", title: "Lengkapi Profil", desc: "Pilih keahlian (Visual/Audio/Motorik/Komunikasi), isi alamat & titik di peta, atur aksesibilitas." },
+    { step: "2", title: "Dapat Rekomendasi", desc: "Halaman rekomendasi menampilkan pekerjaan terdekat yang paling cocok." },
+    { step: "3", title: "Terima / Tolak", desc: "Jika dipilih perusahaan, terima → pekerjaan aktif (upah terkunci, Dana Aman)." },
+    { step: "4", title: "Kerjakan & Selesai", desc: "Tandai selesai → menunggu konfirmasi perusahaan." },
+    { step: "5", title: "Perusahaan Konfirmasi → Pembayaran Diproses", desc: "Perusahaan konfirmasi → selesai & pembayaran diproses." },
   ];
   return (
     <div className="flex-1 bg-white">
@@ -31,7 +31,7 @@ export default function CaraKerja() {
       <div className="bg-slate-50 py-16 border-b border-slate-200">
         <div className="container mx-auto px-4 md:px-8 max-w-5xl text-center">
           <h1 className="text-4xl font-bold text-slate-900">Cara Kerja <span className="text-primary">KaryaSetara</span></h1>
-          <p className="text-slate-600 mt-4 max-w-2xl mx-auto">Alur lengkap inklusif: Employer → Sistem Matching (Bitmasking + Haversine + Min-Heap) → Worker → Smart Ledger.</p>
+          <p className="text-slate-600 mt-4 max-w-2xl mx-auto">Alur lengkap inklusif: Perusahaan → Pencocokan Keahlian & Jarak → Pekerja → Dana Aman.</p>
         </div>
       </div>
 
@@ -68,17 +68,22 @@ export default function CaraKerja() {
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <Link href="/worker/reports/create" className="bg-white text-slate-900 px-6 py-3 rounded-xl font-medium">Buat Laporan</Link>
             <Link href="/admin/dashboard" className="bg-primary text-white px-6 py-3 rounded-xl font-medium">Admin Moderasi</Link>
-            <Link href="/tentang" className="border border-slate-700 px-6 py-3 rounded-xl font-medium">Tentang Smart Ledger</Link>
+            <Link href="/tentang" className="border border-slate-700 px-6 py-3 rounded-xl font-medium">Tentang Dana Aman</Link>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-4 md:px-8 py-10 max-w-5xl text-center">
-        <h3 className="font-bold text-slate-900">Smart Ledger & Matching Detail</h3>
-        <p className="text-sm text-slate-600 mt-2 max-w-3xl mx-auto text-left md:text-center leading-relaxed">
-          <b>Bitmasking:</b> kemampuan 1=Visual,2=Audio,4=Motorik,8=Komunikasi. Worker 15 (1111) cocok untuk job 9 (1001). Query SQL: <code className="bg-slate-100 px-1 rounded">(required_capability_bitmask & worker_mask) = required</code>.<br/>
-          <b>Haversine:</b> jarak aman radius 5km untuk pekerja rentan. <b>Priority Score:</b> 60 skill + 40 jarak + fairness. <b>Smart Ledger:</b> PostgreSQL trigger <code className="bg-slate-100 px-1 rounded">check_wage_tampering()</code> — upah locked saat worker_id terisi, exception jika diubah.
+        <h3 className="font-bold text-slate-900">Dana Aman & Pencocokan — Detail Sederhana</h3>
+        <p className="text-sm text-slate-600 mt-2 max-w-3xl mx-auto leading-relaxed">
+          Dana Aman mengunci upah saat pekerja menyetujui, tidak bisa diubah perusahaan. Pencocokan berdasarkan keahlian dan jarak aman (radius 5 km) dengan urutan prioritas yang adil.
         </p>
+        <details className="mt-4 max-w-3xl mx-auto text-left bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <summary className="text-sm font-semibold text-slate-700 cursor-pointer">Lihat detail teknis untuk juri</summary>
+          <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+            Keahlian disimpan sebagai angka (1=Visual,2=Audio,4=Motorik,8=Komunikasi). Contoh: pekerja 15 cocok untuk lowongan 9. Jarak dihitung dengan rumus jarak aman, skor 60% keahlian + 40% jarak. Dana Aman dikunci otomatis di sistem.
+          </p>
+        </details>
         <BackButton fallbackHref="/" label="Kembali ke Beranda" className="mt-6 mx-auto" />
       </div>
     </div>

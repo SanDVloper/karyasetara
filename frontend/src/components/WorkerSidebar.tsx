@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Briefcase, ClipboardCheck, History, Mail, Wallet, User, HelpCircle, LogOut, Accessibility, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { Home, Briefcase, ClipboardCheck, History, Flag, Wallet, User, HelpCircle, LogOut, Accessibility, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -41,7 +41,7 @@ export default function WorkerSidebar() {
     { href: "/worker/jobs", label: "Pekerjaan", icon: Briefcase },
     { href: "/worker/my-jobs", label: "Pekerjaan Aktif", icon: ClipboardCheck },
     { href: "/worker/my-jobs", label: "Riwayat", icon: History, query: "?status=completed" },
-    { href: "/worker/reports", label: "Pesan", icon: Mail, badge: null },
+    { href: "/worker/reports", label: "Laporan", icon: Flag, badge: null },
     { href: "/worker/payments", label: "Pembayaran", icon: Wallet },
     { href: "/worker/profile", label: "Profil", icon: User },
     { href: "/worker/accessibility", label: "Aksesibilitas", icon: Accessibility },
@@ -147,8 +147,8 @@ export default function WorkerSidebar() {
           <span className="text-[10px] font-medium">Aktif</span>
         </Link>
         <Link href="/worker/reports" className={`flex flex-col items-center gap-1 py-2 px-3 ${isActive("/worker/reports") ? "text-primary" : "text-slate-500"}`}>
-          <Mail className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Pesan</span>
+          <Flag className="w-5 h-5" />
+          <span className="text-[10px] font-medium">Laporan</span>
         </Link>
         <Link href="/worker/profile" className={`flex flex-col items-center gap-1 py-2 px-3 ${isActive("/worker/profile") ? "text-primary" : "text-slate-500"}`}>
           <User className="w-5 h-5" />

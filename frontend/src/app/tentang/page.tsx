@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
-  description: "Tentang KaryaSetara: SDG 8 & 11, Matriks Kemampuan bitmasking, Smart Ledger anti-eksploitasi untuk disabilitas & lansia.",
+  description: "Tentang KaryaSetara: SDG 8 & 11, pencocokan keahlian, dan Dana Aman untuk disabilitas & lansia.",
 };
 import BackButton from "@/components/BackButton";
 
@@ -39,9 +39,9 @@ export default function TentangKami() {
             <div className="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mx-auto">
               <Heart className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Matriks Kemampuan</h3>
+            <h3 className="text-xl font-bold text-slate-900">Kecocokan Keahlian</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Tidak ada label kekurangan. Kami menggunakan algoritma pencocokan (Bitmasking) untuk mempertemukan kemampuan optimal pekerja dengan kebutuhan perusahaan.
+              Tidak ada label kekurangan. Kami mencocokkan keahlian terbaik pekerja dengan kebutuhan perusahaan secara adil.
             </p>
           </div>
 
@@ -49,9 +49,9 @@ export default function TentangKami() {
             <div className="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mx-auto">
               <Shield className="w-8 h-8" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Smart Ledger</h3>
+            <h3 className="text-xl font-bold text-slate-900">Dana Aman</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Anti-eksploitasi. Sistem kami mengunci upah yang disepakati secara permanen di tingkat database (PostgreSQL Triggers) untuk menjamin hak pekerja.
+              Anti-eksploitasi. Upah yang disepakati dikunci otomatis agar tidak bisa diubah, untuk menjamin hak pekerja.
             </p>
           </div>
         </div>

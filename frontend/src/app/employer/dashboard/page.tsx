@@ -78,11 +78,11 @@ export default function EmployerDashboard() {
               <div>
                 <p className="text-xs tracking-widest text-slate-400 font-semibold uppercase">Area Perusahaan</p>
                 <h1 className="text-2xl font-bold mt-1">{companyName}</h1>
-                <p className="text-slate-400 text-sm mt-1 max-w-xl">Rekrut talenta inklusif dengan <span className="text-blue-300 font-semibold">Smart Matching</span> (Bitmask + Haversine) & kelola upah dengan <span className="text-emerald-300 font-semibold">Smart Ledger</span> yang terkunci di database.</p>
+                <p className="text-slate-400 text-sm mt-1 max-w-xl">Rekrut talenta inklusif dengan <span className="text-blue-300 font-semibold">pencocokan keahlian & jarak</span> dan kelola upah dengan <span className="text-emerald-300 font-semibold">Dana Aman</span> yang terkunci otomatis.</p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   <Link href="/employer/jobs" className="text-xs bg-white text-slate-900 px-3 py-1.5 rounded-lg font-medium hover:bg-slate-100">Pekerjaan Saya →</Link>
                   <Link href="/employer/profile" className="text-xs border border-slate-600 text-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-800">Profil Perusahaan</Link>
-                  <span className="text-xs bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3"/> Smart Ledger Aktif</span>
+                  <span className="text-xs bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-lg flex items-center gap-1"><ShieldCheck className="w-3 h-3"/> Dana Aman Aktif</span>
                 </div>
               </div>
             </div>
@@ -134,8 +134,8 @@ export default function EmployerDashboard() {
             </p>
           </div>
           <div className="bg-slate-900 text-white p-6 rounded-2xl border border-slate-800">
-            <h3 className="font-bold flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-emerald-400"/> Smart Ledger</h3>
-            <p className="text-sm text-slate-300 mt-2">Upah terkunci permanen di PostgreSQL trigger. Tidak bisa diubah setelah worker ter-assign.</p>
+            <h3 className="font-bold flex items-center gap-2"><ShieldCheck className="w-5 h-5 text-emerald-400"/> Dana Aman</h3>
+            <p className="text-sm text-slate-300 mt-2">Upah terkunci otomatis. Tidak bisa diubah setelah pekerja terpilih.</p>
             <div className="mt-4 p-3 bg-slate-800 rounded-xl border border-slate-700">
               <p className="text-xs text-slate-400">Total Upah Terkunci</p>
               <p className="text-lg font-bold text-white">Rp {stats.lockedWage.toLocaleString("id-ID")}</p>
@@ -150,7 +150,7 @@ export default function EmployerDashboard() {
           <div className="p-6 flex justify-between items-center border-b border-slate-100">
             <div>
               <h2 className="text-lg font-bold text-slate-900">Lowongan Terbaru</h2>
-              <p className="text-sm text-slate-500">Kelola kandidat dengan algoritma Min-Heap + Haversine (prioritas jarak & kemampuan).</p>
+              <p className="text-sm text-slate-500">Kelola kandidat dengan urutan paling cocok (jarak & keahlian).</p>
             </div>
             <Link href="/employer/jobs" className="hidden md:inline-flex text-sm font-medium text-primary hover:underline">Lihat Semua <ChevronRight className="w-4 h-4"/></Link>
           </div>
@@ -186,7 +186,7 @@ export default function EmployerDashboard() {
             ))}
           </div>
           <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-            <p className="text-xs text-slate-500">Tips: Buat lowongan dengan kemampuan spesifik (bitmask) untuk dapat match 92% seperti contoh Made.</p>
+            <p className="text-xs text-slate-500">Tips: Buat lowongan dengan keahlian spesifik untuk dapat kecocokan 92% seperti contoh Made.</p>
             <Link href="/employer/jobs" className="text-sm font-medium text-primary md:hidden">Lihat Semua</Link>
           </div>
         </section>

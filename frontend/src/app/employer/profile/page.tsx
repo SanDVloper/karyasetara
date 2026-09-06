@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Building2, MapPin, Loader2, Check, AlertCircle, CheckCircle2 } from "lucide-react";
 import BackButton from "@/components/BackButton";
+import MapPicker from "@/components/MapPicker";
 
 export default function EmployerProfile() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [message, setMessage] = useState<{type:'error'|'success', text:string}|null>(null);
   const [profile, setProfile] = useState({ name:"", address:"", latitude:"", longitude:"" });
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -83,13 +85,16 @@ export default function EmployerProfile() {
               <input name="longitude" value={profile.longitude} onChange={handleChange} className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" placeholder="106.816"/>
             </div>
           </div>
+          <button type="button" onClick={()=>setShowMap(true)} className="w-full text-sm font-medium text-white bg-primary py-2.5 rounded-xl hover:bg-primary-hover flex items-center justify-center gap-2"><MapPin className="w-4 h-4"/> Pilih Titik di Peta</button>
           <button type="button" onClick={getLocation} className="w-full text-sm font-medium text-primary bg-blue-50 py-2.5 rounded-xl hover:bg-blue-100 flex items-center justify-center gap-2"><MapPin className="w-4 h-4"/> Ambil Lokasi Saat Ini (GPS)</button>
+          <p className="text-xs text-slate-500 text-center">Atau isi manual latitude/longitude — keduanya tetap didukung.</p>
           <button onClick={handleSave} disabled={saving} className="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primary-hover shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 disabled:opacity-60">
             {saving? <Loader2 className="w-5 h-5 animate-spin"/>: <Check className="w-5 h-5"/>} Simpan Profil Perusahaan
           </button>
-          <p className="text-xs text-slate-500 text-center">Data tersimpan via <code className="bg-slate-100 px-1 rounded">PUT /api/employer/profile</code> (role employer strict).</p>
+          <p className="text-xs text-slate-500 text-center">Data tersimpan via sistem (role employer strict).</p>
         </section>
       </div>
+      <MapPicker open={showMap} lat={profile.latitude} lng={profile.longitude} onClose={()=>setShowMap(false)} onPick={(nlat,nlng,addr)=> setProfile(p=>({ ...p, latitude: nlat.toString(), longitude: nlng.toString(), address: addr || p.address }))} />
     </div>
   );
 }

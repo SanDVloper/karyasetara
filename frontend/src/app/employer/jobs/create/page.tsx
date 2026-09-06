@@ -4,10 +4,12 @@ import { Briefcase, DollarSign, Accessibility, MapPin, Loader2, AlertCircle } fr
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/BackButton";
+import MapPicker from "@/components/MapPicker";
 
 export default function CreateJob() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -151,14 +153,14 @@ export default function CreateJob() {
                   placeholder="50000" 
                 />
               </div>
-              <p className="text-xs text-slate-500 mt-1">Upah akan dikunci otomatis di database saat pekerja menyepakati pekerjaan ini.</p>
+              <p className="text-xs text-slate-500 mt-1">Upah akan dikunci otomatis di sistem saat pekerja menyetujui pekerjaan ini.</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
               <Accessibility className="w-5 h-5 text-primary" />
-              Syarat Kemampuan (Bitmasking)
+              Syarat Kemampuan
             </h2>
             <p className="text-sm text-slate-500">Pilih HANYA kemampuan yang mutlak dibutuhkan untuk pekerjaan ini agar memberi kesempatan inklusif yang lebih luas.</p>
             
@@ -185,7 +187,8 @@ export default function CreateJob() {
               <MapPin className="w-5 h-5 text-primary" />
               Lokasi Pekerjaan
             </h2>
-            <p className="text-sm text-slate-500">Akan digunakan untuk mengukur radius jarak (Haversine) dengan kandidat pekerja.</p>
+            <p className="text-sm text-slate-500">Akan digunakan untuk mengukur jarak aman dengan kandidat.</p>
+            <button type="button" onClick={()=>setShowMap(true)} className="w-full text-sm font-medium text-white bg-primary py-2.5 rounded-xl hover:bg-primary-hover flex items-center justify-center gap-2"><MapPin className="w-4 h-4"/> Pilih Titik di Peta</button>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Alamat Lengkap Lokasi</label>
               <input
@@ -197,27 +200,35 @@ export default function CreateJob() {
                 className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                 placeholder="Jl. Contoh No. 123, Jakarta"
               />
+              <p className="text-xs text-slate-500 mt-1">Bisa isi manual atau pilih via peta — keduanya didukung.</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <input 
-                type="text" 
-                name="latitude"
-                value={formData.latitude}
-                onChange={handleChange}
-                required
-                className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" 
-                placeholder="Latitude (Contoh: -6.20)" 
-              />
-              <input 
-                type="text" 
-                name="longitude"
-                value={formData.longitude}
-                onChange={handleChange}
-                required
-                className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" 
-                placeholder="Longitude (Contoh: 106.81)" 
-              />
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Latitude</label>
+                <input 
+                  type="text" 
+                  name="latitude"
+                  value={formData.latitude}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" 
+                  placeholder="Latitude (Contoh: -6.20)" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Longitude</label>
+                <input 
+                  type="text" 
+                  name="longitude"
+                  value={formData.longitude}
+                  onChange={handleChange}
+                  required
+                  className="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-primary/20 outline-none" 
+                  placeholder="Longitude (Contoh: 106.81)" 
+                />
+              </div>
             </div>
+            <p className="text-xs text-slate-500 text-center">Atau isi manual latitude/longitude — keduanya tetap didukung.</p>
           </div>
 
           <div className="pt-4 flex gap-4">
@@ -235,6 +246,7 @@ export default function CreateJob() {
         </form>
       </div>
       </div>
+      <MapPicker open={showMap} lat={formData.latitude} lng={formData.longitude} onClose={()=>setShowMap(false)} onPick={(nlat,nlng,addr)=> setFormData(p=>({ ...p, latitude: nlat.toString(), longitude: nlng.toString(), location_address: addr || p.location_address }))} />
     </div>
   );
 }
